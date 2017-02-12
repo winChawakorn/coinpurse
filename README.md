@@ -11,6 +11,6 @@ User can try deposit and withdraw the coin(s).
 - `Purse` is a class that consist of `Coin` and it's capacity like a purse.
   User can insert the `Coin`, count the `Coin`, get the total value, check is it full,
   and withdraw the `Coin`.
-- `PurseTest` is the tester for `Purse`. It use junit to test is this `Purse` work correctly.
+- `PurseTest` is the tester for `Purse`. It use `org.junit.*` to test is this `Purse` work correctly.
 
 # Author : Chawakorn Suphepre
