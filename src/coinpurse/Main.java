@@ -18,12 +18,6 @@ public class Main {
 	 *            not used
 	 */
 	public static void main(String[] args) {
-		// TODO follow the steps in the sequence diagram
-		// 1. create a Purse
-
-		// 2. create a ConsoleDialog with a reference to the Purse object
-
-		// 3. run the ConsoleDialog
 		Purse purse = new Purse(CAPACITY);
 		new ConsoleDialog(purse).run();
 	}
