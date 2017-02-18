@@ -3,9 +3,12 @@ package coinpurse;
 import java.util.Scanner;
 
 /**
- * User Interface for the Coin Purse. This class provides simple interactive
- * dialog for inserting and removing money to/from the purse, and displaying the
+ * User Interface for the Purse. This class provides simple interactive dialog
+ * for inserting and removing money to/from the purse, and displaying the
  * balance.
+ *
+ * @author Chawakorn Suphepre
+ * @version 2017.02.19
  */
 public class ConsoleDialog {
 	// default currency for this dialog
@@ -13,7 +16,6 @@ public class ConsoleDialog {
 	// use a single java.util.Scanner object for reading all input
 	private static Scanner console = new Scanner(System.in);
 
-	// TODO How does this object get a Purse? DO NOT WRITE "new Purse(xx)".
 	private Purse purse;
 
 	/**
@@ -56,20 +58,27 @@ public class ConsoleDialog {
 	}
 
 	/**
-	 * Ask the user how many coins to deposit into purse, then deposit them.
+	 * Ask the user how many valuable to deposit into purse, then deposit them.
 	 * Show result of success or failure.
 	 */
 	public void depositDialog() {
 		System.out
-				.print("Enter value of coin(s) to deposit on one line [eg: 5 5 1]: ");
+				.print("Enter value of money(s) to deposit on one line [eg: 5 5 1]: ");
 		String inline = console.nextLine();
 		// parse input line into numbers
 		Scanner scanline = new Scanner(inline);
 		while (scanline.hasNextDouble()) {
 			double value = scanline.nextDouble();
-			Coin coin = new Coin(value);
-			System.out.printf("Deposit %s... ", coin.toString());
-			boolean ok = purse.insert(coin);
+			boolean ok = false;
+			if (value < 20) {
+				Coin coin = new Coin(value);
+				System.out.printf("Deposit %s... ", coin.toString());
+				ok = purse.insert(coin);
+			} else {
+				BankNote bank = new BankNote(value);
+				System.out.printf("Deposit %s... ", bank.toString());
+				ok = purse.insert(bank);
+			}
 			System.out.println((ok ? "ok" : "FAILED"));
 		}
 		if (scanline.hasNext())
@@ -78,20 +87,20 @@ public class ConsoleDialog {
 
 	/**
 	 * Ask how much money (Baht) to withdraw and then do it. After withdraw,
-	 * show the values of the coins we withdrew.
+	 * show the values of the valuables we withdrew.
 	 */
 	public void withdrawDialog() {
 		System.out.print("How much to withdraw? ");
 		if (console.hasNextDouble()) {
 			double amount = console.nextDouble();
-			Coin[] coins = purse.withdraw(amount);
-			if (coins == null)
+			Valuable[] valuable = purse.withdraw(amount);
+			if (valuable == null)
 				System.out.printf("Sorry, couldn't withdraw %g %s\n", amount,
 						CURRENCY);
 			else {
 				System.out.print("You withdrew:");
-				for (int k = 0; k < coins.length; k++) {
-					System.out.print(" " + coins[k].toString());
+				for (int k = 0; k < valuable.length; k++) {
+					System.out.print(" " + valuable[k].toString());
 				}
 				System.out.println();
 			}

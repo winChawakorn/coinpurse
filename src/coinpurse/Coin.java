@@ -4,10 +4,10 @@ package coinpurse;
  * a coin with a monetary value and currency
  * 
  * @author Chawakorn Suphepre
- * @version 2017.02.12
+ * @version 2017.02.19
  */
 
-public class Coin implements Comparable<Coin> {
+public class Coin implements Comparable<Coin>, Valuable {
 	public static final String DEFAULT_CURRENCY = "Baht";
 	/** Value of the coin. */
 	private final double value;

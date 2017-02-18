@@ -3,70 +3,68 @@ package coinpurse;
 import java.util.*;
 
 /**
- * Some Coin utility methods for practice using Lists and Comparator.
+ * Some Valuable utility methods for practice using Lists and Comparator.
  * 
  * @author Chawakorn Suphepre
- * @version 2017.02.12
+ * @version 2017.02.19
  */
 public class CoinUtil {
 
 	/**
-	 * Method that examines all the coins in a List and returns only the coins
-	 * that have a currency that matches the parameter value.
+	 * Method that examines all the valuables in a List and returns only the
+	 * valuables that have a currency that matches the parameter value.
 	 * 
-	 * @param coinlist
-	 *            is a List of Coin objects. This list is not modified.
+	 * @param valuablelist
+	 *            is a List of Valuable objects. This list is not modified.
 	 * @param currency
 	 *            is the currency we want. Must not be null.
-	 * @return a new List containing only the elements from coinlist that have
-	 *         the requested currency.
+	 * @return a new List containing only the elements from valuablelist that
+	 *         have the requested currency.
 	 */
-	public static List<Coin> filterByCurrency(final List<Coin> coinlist,
-			String currency) {
+	public static List<Valuable> filterByCurrency(
+			final List<Valuable> valuablelist, String currency) {
 		if (currency == null) {
 			return null;
 		}
-		List<Coin> filter = new ArrayList<Coin>();
-		for (Coin x : coinlist) {
+		List<Valuable> filter = new ArrayList<Valuable>();
+		for (Valuable x : valuablelist) {
 			if (x.getCurrency().equals(currency))
 				filter.add(x);
 		}
-		return filter; // return a list of coin references copied from coinlist
+		return filter; // return a list of valuable references copied from
+						// valuablelist
 	}
 
 	/**
-	 * Method to sort a list of coins by currency. On return, the list (coins)
-	 * will be ordered by currency.
+	 * Method to sort a list of valuables by currency. On return, the list
+	 * (valuables) will be ordered by currency.
 	 * 
-	 * @param coins
-	 *            is a List of Coin objects we want to sort.
+	 * @param valuable
+	 *            is a List of Valuable objects we want to sort.
 	 */
-	public static void sortByCurrency(List<Coin> coins) {
-		coins.sort(new CompareByCurrency());
+	public static void sortByCurrency(List<Valuable> valuable) {
+		valuable.sort(new CompareByCurrency());
 	}
 
 	/**
-	 * Sum coins by currency and print the sum for each currency. Print one line
-	 * for the sum of each currency. For example: coins = { Coin(1,"Baht"),
-	 * Coin(20,"Ringgit"), Coin(10,"Baht"), Coin(0.5,"Ringgit") } then
-	 * sumByCurrency(coins) would print:
+	 * Sum valuables by currency and print the sum for each currency. Print one
+	 * line for the sum of each currency. For example: valuables = {
+	 * Coin(1,"Baht"), Coin(20,"Ringgit"), Coin(10,"Baht"), Coin(0.5,"Ringgit")
+	 * } then sumByCurrency(valuables) would print:
 	 * 
 	 * 11.00 Baht 20.50 Ringgit
+	 * 
+	 * @param valuable
 	 */
-	public static void sumByCurrency(List<Coin> coins) {
-		coins.sort(new CompareByCurrency());
-		double sum = 0;
-		for (int i = 0; i < coins.size() - 1; i++) {
-			sum += coins.get(i).getValue();
-			if (!(coins.get(i).getCurrency().equals(coins.get(i + 1)
-					.getCurrency())) || i == coins.size() - 2) {
-				if (coins.get(i).getCurrency()
-						.equals(coins.get(i + 1).getCurrency())) {
-					sum += coins.get(i + 1).getValue();
-				}
-				System.out.println(sum + " " + coins.get(i).getCurrency());
-				sum = 0;
-			}
+	public static void sumByCurrency(List<Valuable> valuable) {
+		Map<String, Double> wordmap = new HashMap<String, Double>();
+		for (Valuable x : valuable) {
+			wordmap.put(x.getCurrency(),
+					wordmap.getOrDefault(x.getCurrency(), 0.0) + x.getValue());
+		}
+		for (String x : wordmap.keySet()) {
+			double count = wordmap.get(x);
+			System.out.printf("%s %.2f\n", x, count);
 		}
 	}
 
@@ -78,61 +76,65 @@ public class CoinUtil {
 	 */
 	public static void main(String[] args) {
 		String currency = "Rupee";
-		System.out.println("Filter coins by currency of " + currency);
-		List<Coin> coins = makeInternationalCoins();
-		int size = coins.size();
+		System.out.println("Filter valuable by currency of " + currency);
+		List<Valuable> valuable = makeInternationalValuable();
+		int size = valuable.size();
 		System.out.print(" INPUT: ");
-		printList(coins, " ");
-		List<Coin> rupees = filterByCurrency(coins, currency);
+		printList(valuable, " ");
+		List<Valuable> rupees = filterByCurrency(valuable, currency);
 		System.out.print("RESULT: ");
 		printList(rupees, " ");
-		if (coins.size() != size)
+		if (valuable.size() != size)
 			System.out.println("Error: you changed the original list.");
 
-		System.out.println("\nSort coins by currency");
-		coins = makeInternationalCoins();
+		System.out.println("\nSort valuable by currency");
+		valuable = makeInternationalValuable();
 		System.out.print(" INPUT: ");
-		printList(coins, " ");
-		sortByCurrency(coins);
+		printList(valuable, " ");
+		sortByCurrency(valuable);
 		System.out.print("RESULT: ");
-		printList(coins, " ");
+		printList(valuable, " ");
 
-		System.out.println("\nSum coins by currency");
-		coins = makeInternationalCoins();
-		System.out.print("coins= ");
-		printList(coins, " ");
-		sumByCurrency(coins);
+		System.out.println("\nSum valuable by currency");
+		valuable = makeInternationalValuable();
+		System.out.print("valuable = ");
+		printList(valuable, " ");
+		sumByCurrency(valuable);
 
 	}
 
 	/**
-	 * Make a list of coins containing different currencies.
+	 * Make a list of valuables containing different currencies.
 	 * 
-	 * @return Array of coins.
+	 * @return Array of valuables.
 	 */
-	public static List<Coin> makeInternationalCoins() {
-		List<Coin> money = new ArrayList<Coin>();
-		money.addAll(makeCoins("Baht", 0.25, 1.0, 2.0, 5.0, 10.0, 10.0));
-		money.addAll(makeCoins("Ringgit", 2.0, 50.0, 1.0, 5.0));
-		money.addAll(makeCoins("Rupee", 0.5, 0.5, 10.0, 1.0));
+	public static List<Valuable> makeInternationalValuable() {
+		List<Valuable> money = new ArrayList<Valuable>();
+		money.addAll(makeValuable("Baht", 0.25, 1.0, 2.0, 5.0, 10.0, 10.0));
+		money.addAll(makeValuable("Ringgit", 2.0, 50.0, 1.0, 5.0));
+		money.addAll(makeValuable("Rupee", 0.5, 0.5, 10.0, 1.0));
 		// randomize the elements
 		Collections.shuffle(money);
 		return money;
 	}
 
 	/**
-	 * Make a list of coins using given values.
+	 * Make a list of valuables using given values.
 	 * 
 	 * @param currency
-	 *            is the currency of these new coins.
+	 *            is the currency of these new valuables.
 	 * @param values
-	 *            is the value of these new coins.
-	 * @return Array of new coins.
+	 *            is the value of these new valuables.
+	 * @return Array of new valuables.
 	 */
-	public static List<Coin> makeCoins(String currency, double... values) {
-		List<Coin> list = new ArrayList<Coin>();
+	public static List<Valuable> makeValuable(String currency, double... values) {
+		List<Valuable> list = new ArrayList<Valuable>();
 		for (double value : values)
-			list.add(new Coin(value, currency));
+			if (value >= 20) {
+				list.add(new BankNote(value, currency));
+			} else {
+				list.add(new Coin(value, currency));
+			}
 		return list;
 	}
 
@@ -157,24 +159,24 @@ public class CoinUtil {
 }
 
 /**
- * Create this class to compare two coins by their currency to sort them by the
- * currency.
+ * Create this class to compare two valuables by their currency to sort them by
+ * the currency.
  * 
  * @author Chawakorn Suphepre
  * @version 2017.02.12
  *
  */
-class CompareByCurrency implements Comparator<Coin> {
+class CompareByCurrency implements Comparator<Valuable> {
 	/**
 	 * @param c1
-	 *            is the first coin to compare.
+	 *            is the first valuable to compare.
 	 * @param c2
-	 *            is the second coin to compare.
-	 * @return -1 if the first coin's currency is come first, 0 if they are
-	 *         equal, 1 if the second coin's currency is come first.
+	 *            is the second valuable to compare.
+	 * @return -1 if the first valuable's currency is come first, 0 if they are
+	 *         equal, 1 if the second valuable's currency is come first.
 	 */
 	@Override
-	public int compare(Coin c1, Coin c2) {
+	public int compare(Valuable c1, Valuable c2) {
 		return c1.getCurrency().compareTo(c2.getCurrency());
 	}
 }

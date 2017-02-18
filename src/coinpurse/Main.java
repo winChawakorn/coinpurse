@@ -2,7 +2,7 @@ package coinpurse;
 
 /**
  * A main class to create objects and connect objects together. The user
- * interface needs a reference to coin purse.
+ * interface needs a reference to purse.
  * 
  * @author Chawakorn Suphepre
  * @version 2017.02.12
