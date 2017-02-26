@@ -16,5 +16,8 @@ User can try deposit and withdraw the coin(s).
 - `BankNote` is the valuable things to insert in the purse. It consist of currency, value,and
   serial number like a bank note.
 - `Valuable` is the interface to implemented by the valuable things.
-
+- `MoneyFactory` is the abstract class to extended by each country's money factory.
+- `AbstractValuable` is the abstract class to extended by the valuable things.
+- `ThaiMoneyFactory` is the money factory to create Thai Baht and Satang.
+- `MalayMoneyFactory` is the money factory to create Malaysian Sen and Ringgit.
 # Author : Chawakorn Suphepre
