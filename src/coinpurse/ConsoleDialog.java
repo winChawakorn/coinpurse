@@ -5,10 +5,11 @@ import java.util.Scanner;
 /**
  * User Interface for the Purse. This class provides simple interactive dialog
  * for inserting and removing money to/from the purse, and displaying the
- * balance.
+ * balance. In this version, update for using MoneyFactory instead of new Coin
+ * and new BankNote.
  *
  * @author Chawakorn Suphepre
- * @version 2017.02.19
+ * @version 2017.02.26
  */
 public class ConsoleDialog {
 	// default currency for this dialog
@@ -62,23 +63,25 @@ public class ConsoleDialog {
 	 * Show result of success or failure.
 	 */
 	public void depositDialog() {
+		MoneyFactory factory = MoneyFactory.getInstance();
 		System.out
 				.print("Enter value of money(s) to deposit on one line [eg: 5 5 1]: ");
 		String inline = console.nextLine();
 		// parse input line into numbers
 		Scanner scanline = new Scanner(inline);
 		while (scanline.hasNextDouble()) {
-			double value = scanline.nextDouble();
+			double amount = scanline.nextDouble();
 			boolean ok = false;
-			if (value < 20) {
-				Coin coin = new Coin(value);
-				System.out.printf("Deposit %s... ", coin.toString());
-				ok = purse.insert(coin);
-			} else {
-				BankNote bank = new BankNote(value);
-				System.out.printf("Deposit %s... ", bank.toString());
-				ok = purse.insert(bank);
+			Valuable v;
+			try {
+				v = factory.createMoney(amount);
+			} catch (IllegalArgumentException e) {
+				System.out.println("Sorry, " + amount
+						+ " is not a valid amount.");
+				continue;
 			}
+			System.out.printf("Deposit %s... ", v.toString());
+			ok = purse.insert(v);
 			System.out.println((ok ? "ok" : "FAILED"));
 		}
 		if (scanline.hasNext())

@@ -1,18 +1,14 @@
 package coinpurse;
 
 /**
- * a bank note with a monetary value, currency, and serial number.
+ * a bank note with a monetary value, currency, and serial number from
+ * AbstractValuable abstract class.
  * 
  * @author Chawakorn Suphepre
- * @version 2017.02.19
+ * @version 2017.02.26
  *
  */
-public class BankNote implements Valuable {
-	public static final String DEFAULT_CURRENCY = "Baht";
-	/** Value of the bank note. */
-	private final double value;
-	/** The currency. */
-	private final String currency;
+public class BankNote extends AbstractValuable {
 	/** The serial number of the bank note. */
 	private long serialNumber;
 	/** The next serial number of the bank note. */
@@ -26,7 +22,8 @@ public class BankNote implements Valuable {
 	 *            is the value of the note.
 	 */
 	public BankNote(double value) {
-		this(value, DEFAULT_CURRENCY);
+		super(value);
+		this.serialNumber = nextSerialNumber;
 	}
 
 	/**
@@ -39,28 +36,16 @@ public class BankNote implements Valuable {
 	 *            is the currency of the note.
 	 */
 	public BankNote(double value, String currency) {
-		this.value = value;
-		this.currency = currency;
+		super(value, currency);
 		this.serialNumber = nextSerialNumber;
+		// nextSerialNumber++;
+	}
+
+	/**
+	 * Set the serial number for new bank.
+	 */
+	public void setNextSerialNumber() {
 		nextSerialNumber++;
-	}
-
-	/**
-	 * Return the currency of the note.
-	 * 
-	 * @return currency
-	 */
-	public String getCurrency() {
-		return this.currency;
-	}
-
-	/**
-	 * Return the value of the note.
-	 * 
-	 * @return value
-	 */
-	public double getValue() {
-		return this.value;
 	}
 
 	/**
@@ -73,31 +58,12 @@ public class BankNote implements Valuable {
 	}
 
 	/**
-	 * Equal this note with another object. Return true if equal, false if not
-	 * equal.
-	 * 
-	 * @param arg
-	 *            is the object to equal with this note.
-	 * @return true if the notes are equal, false if they aren't equal.
-	 */
-	public boolean equals(Object arg) {
-		if (arg == null)
-			return false;
-		if (arg.getClass() != this.getClass())
-			return false;
-		BankNote other = (BankNote) arg;
-		if (other.value == this.value && other.currency.equals(this.currency))
-			return true;
-		return false;
-	}
-
-	/**
 	 * Return String that contains value, currency, and serial number.
 	 * 
-	 * @return value and currency of this note.
+	 * @return Description of this bank note
 	 */
 	public String toString() {
-		return this.value + "-" + this.currency + " note [" + this.serialNumber
-				+ "]";
+		return this.getValue() + "-" + this.getCurrency() + " note ["
+				+ this.serialNumber + "]";
 	}
 }
