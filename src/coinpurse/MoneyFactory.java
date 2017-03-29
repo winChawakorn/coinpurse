@@ -21,7 +21,7 @@ public abstract class MoneyFactory {
 	 * 
 	 * @return factory
 	 */
-	static MoneyFactory getInstance() {
+	public static MoneyFactory getInstance() {
 		return factory;
 	}
 

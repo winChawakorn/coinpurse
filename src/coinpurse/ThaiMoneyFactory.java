@@ -11,6 +11,9 @@ import java.util.List;
  * @version 2017.02.26
  */
 public class ThaiMoneyFactory extends MoneyFactory {
+	/** The next serial number of the bank note. */
+	private long nextSerialNumber = 1000000;
+
 	/**
 	 * Create Thai money by primitive double. Filter the value to be able to
 	 * create only specific coin, bank note, and currency(Baht and Satang).
@@ -31,7 +34,7 @@ public class ThaiMoneyFactory extends MoneyFactory {
 			return c;
 		} else if (vn.contains(value)) {
 			BankNote b = new BankNote(value);
-			b.setNextSerialNumber();
+			b.setSerialNumber(++this.nextSerialNumber);
 			return b;
 		}
 		throw new IllegalArgumentException();

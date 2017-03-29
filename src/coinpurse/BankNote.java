@@ -5,14 +5,12 @@ package coinpurse;
  * AbstractValuable abstract class.
  * 
  * @author Chawakorn Suphepre
- * @version 2017.02.26
+ * @version 2017.03.29
  *
  */
 public class BankNote extends AbstractValuable {
 	/** The serial number of the bank note. */
 	private long serialNumber;
-	/** The next serial number of the bank note. */
-	public static long nextSerialNumber = 1000000;
 
 	/**
 	 * Initialize new BankNote by the value. The currency will be set to default
@@ -23,7 +21,6 @@ public class BankNote extends AbstractValuable {
 	 */
 	public BankNote(double value) {
 		super(value);
-		this.serialNumber = nextSerialNumber;
 	}
 
 	/**
@@ -37,15 +34,6 @@ public class BankNote extends AbstractValuable {
 	 */
 	public BankNote(double value, String currency) {
 		super(value, currency);
-		this.serialNumber = nextSerialNumber;
-		// nextSerialNumber++;
-	}
-
-	/**
-	 * Set the serial number for new bank.
-	 */
-	public void setNextSerialNumber() {
-		nextSerialNumber++;
 	}
 
 	/**
@@ -55,6 +43,16 @@ public class BankNote extends AbstractValuable {
 	 */
 	public long getSerialNumber() {
 		return this.serialNumber;
+	}
+
+	/**
+	 * Set the serial number to this bank note.
+	 * 
+	 * @param newSerialNumber
+	 *            is the serial number to set to.
+	 */
+	public void setSerialNumber(long newSerialNumber) {
+		this.serialNumber = newSerialNumber;
 	}
 
 	/**

@@ -8,9 +8,12 @@ import java.util.List;
  * bank note.
  * 
  * @author Chawakorn Suphepre
- * @version 2017.02.26
+ * @version 2017.03.29
  */
 public class MalayMoneyFactory extends MoneyFactory {
+	/** The next serial number of the bank note. */
+	private long nextSerialNumber = 1000000;
+
 	/**
 	 * Create Malaysian money by primitive double. Filter the value to be able
 	 * to create only specific coin, bank note, and currency(Sen and Ringgit).
@@ -29,7 +32,7 @@ public class MalayMoneyFactory extends MoneyFactory {
 			return c;
 		} else if (vn.contains(value)) {
 			BankNote b = new BankNote(value, "Ringgit");
-			b.setNextSerialNumber();
+			b.setSerialNumber(++this.nextSerialNumber);
 			return b;
 		}
 		throw new IllegalArgumentException();

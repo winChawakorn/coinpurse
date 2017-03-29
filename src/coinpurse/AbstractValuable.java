@@ -5,7 +5,7 @@ package coinpurse;
  * things in the purse. Consist of Value, Currency, equals, and compareTo.
  * 
  * @author Chawakorn Suphepre
- * @version 2017.02.25
+ * @version 2017.03.29
  */
 public abstract class AbstractValuable implements Valuable {
 	/* Value of the valuable */
@@ -51,7 +51,9 @@ public abstract class AbstractValuable implements Valuable {
 	public int compareTo(Valuable v) {
 		if (v == null)
 			return -1;
-		return (int) Math.signum(this.value - v.getValue());
+		if (this.currency.equals(v.getCurrency()))
+			return (int) Math.signum(this.value - v.getValue());
+		return this.currency.compareTo(v.getCurrency());
 	}
 
 	/**
