@@ -2,6 +2,9 @@ package coinpurse;
 
 import java.util.ResourceBundle;
 
+import coinpurse.gui.PurseBalanceObserver;
+import coinpurse.gui.PurseStatusObserver;
+
 /**
  * A main class to create objects and connect objects together. The user
  * interface needs a reference to purse. Now it use ResourceBundle to read the
@@ -39,6 +42,12 @@ public class Main {
 			MoneyFactory.setMoneyFactory(factory);
 		}
 		Purse purse = new Purse(CAPACITY);
+		PurseBalanceObserver observer1 = new PurseBalanceObserver();
+		PurseStatusObserver observer2 = new PurseStatusObserver();
+		purse.addObserver(observer1);
+		purse.addObserver(observer2);
+		observer1.run();
+		observer2.run();
 		new ConsoleDialog(purse).run();
 	}
 }

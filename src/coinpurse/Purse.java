@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Observable;
 
 /**
  * A purse contains valuables. You can insert valuables, withdraw money, check
@@ -13,7 +14,7 @@ import java.util.List;
  * @author Chawakorn Suphepre
  * @version 2017.02.17
  */
-public class Purse {
+public class Purse extends Observable {
 	/** Collection of objects in the purse. */
 	List<Valuable> money = new ArrayList<Valuable>();
 	/**
@@ -91,6 +92,8 @@ public class Purse {
 		this.money.add(valuable);
 		money.sort(new CompareByValue());
 		Collections.reverse(money);
+		setChanged();
+		notifyObservers("insert " + valuable.getValue());
 		return true;
 	}
 
@@ -107,6 +110,7 @@ public class Purse {
 	public Valuable[] withdraw(double amount) {
 		if (amount <= 0)
 			return null;
+		double saveAmount = amount;
 		List<Valuable> usedMoney = new ArrayList<Valuable>();
 		for (int i = 0; i < this.count(); i++) {
 			if (this.money.get(i).getValue() <= amount) {
@@ -119,14 +123,16 @@ public class Purse {
 		}
 		Valuable[] array = new Valuable[usedMoney.size()];
 		usedMoney.toArray(array);
-		for (Valuable x : usedMoney) {
+		for (Valuable v : usedMoney) {
 			for (int i = 0; i < this.count(); i++) {
-				if (x.equals(this.money.get(i))) {
+				if (v.equals(this.money.get(i))) {
 					this.money.remove(i);
 					break;
 				}
 			}
 		}
+		setChanged();
+		notifyObservers("withdrew " + saveAmount);
 		return array;
 	}
 

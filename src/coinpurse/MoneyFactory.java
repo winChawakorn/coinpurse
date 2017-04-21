@@ -31,7 +31,7 @@ public abstract class MoneyFactory {
 	 * @param f
 	 *            is the MoneyFactory to set.
 	 */
-	static void setMoneyFactory(MoneyFactory f) {
+	public static void setMoneyFactory(MoneyFactory f) {
 		factory = f;
 	}
 
