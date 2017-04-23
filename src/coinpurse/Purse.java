@@ -12,7 +12,7 @@ import java.util.Observable;
  * purse decides which valuables to remove.
  * 
  * @author Chawakorn Suphepre
- * @version 2017.02.17
+ * @version 2017.04.23
  */
 public class Purse extends Observable {
 	/** Collection of objects in the purse. */
@@ -31,6 +31,15 @@ public class Purse extends Observable {
 	 */
 	public Purse(int capacity) {
 		this.capacity = capacity;
+	}
+
+	/**
+	 * Return the unmodified list of the valuables in the purse.
+	 * 
+	 * @return unmodifiableList of this.money
+	 */
+	public List<Valuable> getList() {
+		return Collections.unmodifiableList(money);
 	}
 
 	/**
@@ -93,7 +102,8 @@ public class Purse extends Observable {
 		money.sort(new CompareByValue());
 		Collections.reverse(money);
 		setChanged();
-		notifyObservers("insert " + valuable.getValue());
+		notifyObservers("Insert " + valuable.getValue() + " "
+				+ valuable.getCurrency());
 		return true;
 	}
 
@@ -132,7 +142,7 @@ public class Purse extends Observable {
 			}
 		}
 		setChanged();
-		notifyObservers("withdrew " + saveAmount);
+		notifyObservers("Withdraw " + saveAmount + " Baht");
 		return array;
 	}
 
