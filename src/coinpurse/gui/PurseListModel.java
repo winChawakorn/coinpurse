@@ -19,14 +19,14 @@ import coinpurse.Valuable;
  * A UI that shows the list of the valuable in the purse at that time.
  * 
  * @author Chawakorn Suphepre
- * @version 2017.04.23
+ * @version 2017.04.30
  *
  */
 public class PurseListModel extends AbstractListModel<Valuable> implements
 		Observer {
 	private Purse purse;
 	private JFrame frame;
-	private ListModel<Valuable> listModel;
+	// private ListModel<Valuable> listModel;
 	private JList<Valuable> listview;
 	private int size;
 	private JScrollPane scrollPane;
@@ -48,8 +48,8 @@ public class PurseListModel extends AbstractListModel<Valuable> implements
 	 * initialize and set the components.
 	 */
 	private void initComponent() {
-		listModel = new PurseListModel(purse);
-		listview = new JList<Valuable>(listModel);
+		// listModel = new PurseListModel(purse);
+		listview = new JList<Valuable>(this);
 		listview.setFont(new Font(Font.MONOSPACED, Font.BOLD, 20));
 		scrollPane = new JScrollPane(listview);
 		frame.add(scrollPane, BorderLayout.CENTER);
@@ -88,13 +88,5 @@ public class PurseListModel extends AbstractListModel<Valuable> implements
 	public void update(Observable o, Object arg) {
 		this.size = getSize();
 		fireContentsChanged(this, 0, size);
-		listview.setModel(this);
-		// for (int i = 0; i < listModel.getSize(); i++) {
-		// System.out.println("\n              "
-		// + listModel.getElementAt(i));
-		// }
-		// Valuable[] v = purse.getList().toArray(new Valuable[0]);
-		// System.out.println("\n updated=================");
-		// listview.setListData(v);
 	}
 }

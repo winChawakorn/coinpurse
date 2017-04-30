@@ -6,22 +6,26 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Observable;
 
+import coinpurse.strategy.WithdrawStrategy;
+
 /**
  * A purse contains valuables. You can insert valuables, withdraw money, check
  * the balance, and check if the purse is full. When you withdraw money, the
  * purse decides which valuables to remove.
  * 
  * @author Chawakorn Suphepre
- * @version 2017.04.23
+ * @version 2017.04.30
  */
 public class Purse extends Observable {
-	/** Collection of objects in the purse. */
+	/* Collection of objects in the purse. */
 	List<Valuable> money = new ArrayList<Valuable>();
 	/**
 	 * Capacity is maximum number of valuable the purse can hold. Capacity is
 	 * set when the purse is created and cannot be changed.
 	 */
 	private final int capacity;
+	/* A WithdrawStrategy to be used in this purse */
+	private WithdrawStrategy strategy;
 
 	/**
 	 * Create a purse with a specified capacity.
@@ -99,8 +103,8 @@ public class Purse extends Observable {
 		if (isFull() || valuable.getValue() <= 0)
 			return false;
 		this.money.add(valuable);
-		money.sort(new CompareByValue());
-		Collections.reverse(money);
+		// money.sort(new CompareByValue());
+		// Collections.reverse(money);
 		setChanged();
 		notifyObservers("Insert " + valuable.getValue() + " "
 				+ valuable.getCurrency());
@@ -120,30 +124,22 @@ public class Purse extends Observable {
 	public Valuable[] withdraw(double amount) {
 		if (amount <= 0)
 			return null;
-		double saveAmount = amount;
-		List<Valuable> usedMoney = new ArrayList<Valuable>();
-		for (int i = 0; i < this.count(); i++) {
-			if (this.money.get(i).getValue() <= amount) {
-				amount -= this.money.get(i).getValue();
-				usedMoney.add(this.money.get(i));
-			}
-		}
-		if (amount > 0) {
+		List<Valuable> temptlist = strategy.withdraw(amount, money);
+		if (temptlist == null || temptlist.size() <= 0)
 			return null;
-		}
-		Valuable[] array = new Valuable[usedMoney.size()];
-		usedMoney.toArray(array);
-		for (Valuable v : usedMoney) {
-			for (int i = 0; i < this.count(); i++) {
-				if (v.equals(this.money.get(i))) {
-					this.money.remove(i);
+		Valuable[] array = new Valuable[temptlist.size()];
+		temptlist.toArray(array);
+		for (Valuable v : temptlist) {
+			for (Valuable m : money) {
+				if (v.equals(m)) {
+					money.remove(m);
 					break;
 				}
 			}
 		}
 		setChanged();
-		notifyObservers("Withdraw " + saveAmount + " Baht");
-		return array;
+		notifyObservers("Withdraw " + amount + " Baht");
+		return temptlist.toArray(new Valuable[0]);
 	}
 
 	/**
@@ -167,27 +163,14 @@ public class Purse extends Observable {
 		return valuableCount + " valuables with value " + valuableBalance
 				+ "\n" + bankCount + " notes with value " + bankBalance;
 	}
-}
 
-/**
- * Create this class to compare two valuables by their value to sort them by the
- * value.
- * 
- * @author Chawakorn Suphepre
- * @version 2017.02.19
- *
- */
-class CompareByValue implements Comparator<Valuable> {
 	/**
-	 * @param c1
-	 *            is the first valuable to compare.
-	 * @param c2
-	 *            is the second valuable to compare.
-	 * @return -1 if the first valuable's currency is come first, 0 if they are
-	 *         equal, 1 if the second valuable's currency is come first.
+	 * Set the purse's WithdrawStrategy to the parameter WithdrawStrategy.
+	 * 
+	 * @param wdStrategy
+	 *            is a WithdrawStrategy to set to.
 	 */
-	@Override
-	public int compare(Valuable c1, Valuable c2) {
-		return (int) Math.signum(c1.getValue() - c2.getValue());
+	public void setWithdrawStrategy(WithdrawStrategy wdStrategy) {
+		this.strategy = wdStrategy;
 	}
 }

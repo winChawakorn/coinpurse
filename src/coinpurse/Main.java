@@ -9,6 +9,8 @@ import coinpurse.gui.PurseBalanceObserver;
 import coinpurse.gui.PurseListModel;
 import coinpurse.gui.PurseStatusObserver;
 import coinpurse.gui.PurseTransactions;
+import coinpurse.strategy.GreedyWithdraw;
+import coinpurse.strategy.RecursiveWithdraw;
 
 /**
  * A main class to create objects and connect objects together. The user
@@ -16,11 +18,11 @@ import coinpurse.gui.PurseTransactions;
  * factory class from the file purse.properties to set the MoneyFactory.
  * 
  * @author Chawakorn Suphepre
- * @version 2017.04.23
+ * @version 2017.04.30
  */
 public class Main {
 	/** The capacity of the purse */
-	private static int CAPACITY = 10;
+	private static int CAPACITY = 40;
 
 	/**
 	 * Configure ,read the file for creating the factory, create the factory,
@@ -59,6 +61,8 @@ public class Main {
 		observer2.run();
 		observer3.run();
 		observer4.run();
+		purse.setWithdrawStrategy(new RecursiveWithdraw());
+		// purse.setWithdrawStrategy(new GreedyWithdraw());
 		new ConsoleDialog(purse).run();
 	}
 }
