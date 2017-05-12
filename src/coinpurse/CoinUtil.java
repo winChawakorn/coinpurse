@@ -8,9 +8,28 @@ import java.util.stream.Collectors;
  * Some Valuable utility methods for practice using Lists and Comparator.
  * 
  * @author Chawakorn Suphepre
- * @version 2017.02.19
+ * @version 2017.05.12
  */
 public class CoinUtil {
+	/**
+	 * Return the larger of a and b, according to the natural ordering (defined
+	 * by compareTo).
+	 * 
+	 * @param a
+	 *            is the first object to be compared.
+	 * @param b
+	 *            is the second object to be compared.
+	 * @return
+	 * @return the larger of a and b.
+	 */
+	public static <E extends Comparable<? super E>> E max(E... a) {
+		// if (a.compareTo(b) >= 0)
+		// return a;
+		// return b;
+		List<E> compare = Arrays.asList(a);
+		return compare.stream().max((m1, m2) -> (m1.compareTo(m2))).get();
+		// return null;
+	}
 
 	/**
 	 * Method that examines all the valuables in a List and returns only the
@@ -24,7 +43,7 @@ public class CoinUtil {
 	 *         have the requested currency.
 	 */
 	public static List<Valuable> filterByCurrency(
-			final List<Valuable> valuablelist, String currency) {
+			final List<? extends Valuable> valuablelist, String currency) {
 		if (valuablelist != null && currency != null) {
 			Predicate<Valuable> curr = (c) -> (c.getCurrency().equals(currency));
 			return valuablelist.stream().filter(curr)
@@ -40,7 +59,7 @@ public class CoinUtil {
 	 * @param valuable
 	 *            is a List of Valuable objects we want to sort.
 	 */
-	public static void sortByCurrency(List<Valuable> valuable) {
+	public static void sortByCurrency(List<? extends Valuable> valuable) {
 		valuable.sort(new CompareByCurrency());
 	}
 
@@ -54,7 +73,7 @@ public class CoinUtil {
 	 * 
 	 * @param valuable
 	 */
-	public static void sumByCurrency(List<Valuable> valuable) {
+	public static void sumByCurrency(List<? extends Valuable> valuable) {
 		Map<String, Double> wordmap = new HashMap<String, Double>();
 		for (Valuable x : valuable) {
 			wordmap.put(x.getCurrency(),
@@ -98,7 +117,6 @@ public class CoinUtil {
 		System.out.print("valuable = ");
 		printList(valuable, " ");
 		sumByCurrency(valuable);
-
 	}
 
 	/**
