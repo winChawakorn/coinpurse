@@ -26,7 +26,7 @@ public class PurseListModel extends AbstractListModel<Valuable> implements
 		Observer {
 	private Purse purse;
 	private JFrame frame;
-	// private ListModel<Valuable> listModel;
+	private ListModel<Valuable> listModel;
 	private JList<Valuable> listview;
 	private int size;
 	private JScrollPane scrollPane;
@@ -48,7 +48,7 @@ public class PurseListModel extends AbstractListModel<Valuable> implements
 	 * initialize and set the components.
 	 */
 	private void initComponent() {
-		// listModel = new PurseListModel(purse);
+		listModel = new PurseListModel(purse);
 		listview = new JList<Valuable>(this);
 		listview.setFont(new Font(Font.MONOSPACED, Font.BOLD, 20));
 		scrollPane = new JScrollPane(listview);
@@ -87,6 +87,6 @@ public class PurseListModel extends AbstractListModel<Valuable> implements
 	@Override
 	public void update(Observable o, Object arg) {
 		this.size = getSize();
-		fireContentsChanged(this, 0, size);
+		fireContentsChanged(listModel, 0, size);
 	}
 }

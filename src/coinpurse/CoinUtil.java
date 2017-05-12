@@ -1,6 +1,8 @@
 package coinpurse;
 
 import java.util.*;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 /**
  * Some Valuable utility methods for practice using Lists and Comparator.
@@ -23,16 +25,12 @@ public class CoinUtil {
 	 */
 	public static List<Valuable> filterByCurrency(
 			final List<Valuable> valuablelist, String currency) {
-		if (currency == null) {
-			return null;
+		if (valuablelist != null && currency != null) {
+			Predicate<Valuable> curr = (c) -> (c.getCurrency().equals(currency));
+			return valuablelist.stream().filter(curr)
+					.collect(Collectors.toList());
 		}
-		List<Valuable> filter = new ArrayList<Valuable>();
-		for (Valuable x : valuablelist) {
-			if (x.getCurrency().equals(currency))
-				filter.add(x);
-		}
-		return filter; // return a list of valuable references copied from
-						// valuablelist
+		return null;
 	}
 
 	/**
